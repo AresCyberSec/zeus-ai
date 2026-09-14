@@ -1,0 +1,19 @@
+# Zeus private data
+memory/
+config/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+ai-env/
+
+# Local backups
+*_backup.py
+*_backup_v2.py
+*_before_config.py
+
+# OS files
+.DS_Store
