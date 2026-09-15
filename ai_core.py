@@ -1,9 +1,11 @@
 import requests
 import os
 import json
+
 print("Zeus Booting...")
 
 name = "Zeus"
+
 
 def load_config(file):
     with open(file, "r") as f:
@@ -12,7 +14,8 @@ def load_config(file):
 
 zeus_identity = load_config("config/identity.txt")
 zeus_personality = load_config("config/personality.txt")
-	
+
+
 def load_memory():
     try:
         with open("memory/memories.json", "r") as f:
@@ -24,6 +27,7 @@ def load_memory():
 def save_memory():
     with open("memory/memories.json", "w") as f:
         json.dump(memory, f, indent=4)
+
 
 def load_conversation():
     try:
@@ -45,6 +49,25 @@ if not isinstance(conversation, list):
 
 memory = load_memory()
 
+
+def format_memory():
+    if not memory:
+        return "No stored memories."
+
+    lines = []
+
+    for category, entries in memory.items():
+        lines.append(f"{category.upper()}:")
+
+        if isinstance(entries, dict):
+            for key, value in entries.items():
+                lines.append(f"- {value}")
+        else:
+            lines.append(f"- {entries}")
+
+    return "\n".join(lines)
+
+
 def remember(category, key, value):
     if category not in memory:
         memory[category] = {}
@@ -54,6 +77,7 @@ def remember(category, key, value):
 
     return "Memory saved."
 
+
 def ask_qwen(message):
     try:
         response = requests.post(
@@ -61,16 +85,16 @@ def ask_qwen(message):
             json={
                 "model": "qwen2.5:7b",
                 "prompt": (
-    zeus_identity
-    + "\n\n"
-    + zeus_personality
-    + "\n\nCurrent memories:\n"
-    + str(memory)
-    + "\n\nConversation history:\n"
-    + str(conversation[-10:])
-    + "\n\nUser: "
-    + message
-),
+                    zeus_identity
+                    + "\n\n"
+                    + zeus_personality
+                    + "\n\nCurrent memories:\n"
+                    + format_memory()
+                    + "\n\nConversation history:\n"
+                    + str(conversation[-10:])
+                    + "\n\nUser: "
+                    + message
+                ),
                 "stream": False
             }
         )
