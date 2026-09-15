@@ -42,7 +42,7 @@ source ai-env/bin/activate
 Install the required Python packages:
 
 ```bash
-pip install requests
+pip install -r requirements.txt
 ```
 
 ## 4. Install and Configure Ollama
